@@ -45,13 +45,13 @@ class Cena2(Scene):
         self.play(func_repr[2].animate.set_color(BLUE))
         #self.wait(0.5)
 
-        reta_t = NumberLine([-5, 5], 15, include_numbers=True, numbers_to_exclude=[-5, 5])
-        reta_st = NumberLine([-5, 5], 15, include_numbers=True, numbers_to_exclude=[-5, 5]).shift(2*DOWN)
+        eixo_t = NumberLine([-5, 5], 15, include_numbers=True, numbers_to_exclude=[-5, 5])
+        eixo_st = NumberLine([-5, 5], 15, include_numbers=True, numbers_to_exclude=[-5, 5]).shift(2*DOWN)
         
 
         self.play(func_repr.animate.shift(2*UP))
-        self.play(Create(reta_t))
-        self.play(Create(reta_st))
+        self.play(Create(eixo_t))
+        self.play(Create(eixo_st))
 
         func_repr_copy = func_repr.copy()
 
@@ -64,17 +64,17 @@ class Cena2(Scene):
         self.play(MoveToTarget(func_repr_copy[0]))
 
         #------------- COLOCANDO PONTOS NAS RETAS -----------------
-        ponto_t = Dot(color=BLUE_C, point=reta_t.n2p(1))
+        ponto_t = Dot(color=BLUE_C, point=eixo_t.n2p(1))
         num_t = DecimalNumber(color=BLUE_C)
-        num_t.add_updater(lambda m: m.set_value(reta_t.p2n(ponto_t.get_center())))
+        num_t.add_updater(lambda m: m.set_value(eixo_t.p2n(ponto_t.get_center())))
         num_t.add_updater(lambda m: m.move_to(ponto_t.get_center()+UP))
         num_t.update()
 
         ponto_st = Dot(color=ORANGE)
-        ponto_st.add_updater(lambda m: m.move_to(reta_st.n2p(2*reta_t.p2n(ponto_t.get_center()))))
+        ponto_st.add_updater(lambda m: m.move_to(eixo_st.n2p(2*eixo_t.p2n(ponto_t.get_center()))))
         ponto_st.update()
         num_st = DecimalNumber(color=ORANGE)
-        num_st.add_updater(lambda m: m.set_value(reta_st.p2n(ponto_st.get_center())))
+        num_st.add_updater(lambda m: m.set_value(eixo_st.p2n(ponto_st.get_center())))
         num_st.add_updater(lambda m: m.move_to(ponto_st.get_center()+UP))
         num_st.update()
 
@@ -100,8 +100,14 @@ class Cena2(Scene):
         self.remove(func_repr[0])
         self.add(num_st_repr)
 
-        self.play(ponto_t.animate.move_to(reta_t.n2p(-2)), run_time=2)
-        self.play(ponto_t.animate.move_to(reta_t.n2p(-0.5)))
+        self.play(ponto_t.animate.move_to(eixo_t.n2p(-2)), run_time=2)
+        self.play(ponto_t.animate.move_to(eixo_t.n2p(-0.5)))
+        self.wait()
+
+        #levando a legenda ao eixo vertical
+
+        a = eixo_t.n2p(0)
+        self.play(MoveRotateNumberLine(eixo_st, lambda a: a*2*UP, lambda a: a*PI/2, 1), func_repr_copy[0].animate.move_to(3.5*DOWN+0.5*LEFT))
         self.wait()
 
 
