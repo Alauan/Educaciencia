@@ -74,3 +74,22 @@ class MoveRotateNumberLine(Animation):
         C = L + np.dot([[cos(R), -sin(R), 0], [sin(R), cos(R), 0], [0, 0, 1]], self.d.transpose())
         self.mobject.move_to(C)
 
+
+class Shrink(Animation):
+    def __init__(
+        self,
+        mobject: VMobject,
+        remover: bool = True,
+        **kwargs,
+    ) -> None:
+        super().__init__(
+            mobject,
+            introducer=False,
+            remover=remover,
+            **kwargs,
+        )
+
+    def interpolate_mobject(self, alpha: float) -> None:
+        self.starting_mobject.generate_target()
+        self.starting_mobject.target.scale(1-alpha)
+        self.mobject.become(self.starting_mobject.target)
